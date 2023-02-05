@@ -1,31 +1,33 @@
-import { useEffect, useState } from "react"
 
-import { Auth, ThemeSupa } from "@supabase/auth-ui-react"
-import { useRouter } from "next/router"
+import { Auth, Typography, Button } from '@supabase/ui'
 import { supabase } from "supabase"
-import { useSession } from "@supabase/auth-helpers-react"
 
 
 
 export const LoginApp = () => {
-  const [dataUser, setUser] = useState({})
-  const rou = useRouter()
-  console.log(rou.pathname)
+  const { user } = Auth.useUser()
   
   return (
     <div>
-      <Auth
-        supabaseClient={supabase}
-        appearance={{ theme: ThemeSupa }}
-        theme="dark"
-        providers={["discord", "apple", "google"]}
-        redirectTo="/success"
-        // magicLink={e =>setUser(e)}
-        // onlyThirdPartyProviders={e =>setUser(e)}
-        // showLinks
-        // view={}
-        // socialLayout={}
-      />
+      <Auth.UserContextProvider supabaseClient={supabase}>
+      <Container supabaseClient={supabase}>
+        <Auth supabaseClient={supabase} />
+      </Container>
+    </Auth.UserContextProvider>
     </div>
   )
+}
+
+const Container = (props) => {
+  const { user } = Auth.useUser()
+  if (user)
+    return (
+      <>
+        <Typography.Text>Signed in: {user.email}</Typography.Text>
+        <Button block onClick={() => props.supabaseClient.auth.signOut()}>
+          Sign out
+        </Button>
+      </>
+    )
+  return props.children
 }
