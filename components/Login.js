@@ -1,33 +1,21 @@
-
-import { Auth, Typography, Button } from '@supabase/ui'
-import { supabase } from "supabase"
-
-
+import { useEffect } from "react"
+import supabase from "supabase"
 
 export const LoginApp = () => {
-  const { user } = Auth.useUser()
-  
+  const handleLogin = async () => {
+    const { error: signInError, data } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+    })
+    console.log(signInError)
+  }
+  async function getUserData() {
+    const { da } = await supabase.auth.getUser
+      console.log("da4a", da)
+  }
+  getUserData()
   return (
     <div>
-      <Auth.UserContextProvider supabaseClient={supabase}>
-      <Container supabaseClient={supabase}>
-        <Auth supabaseClient={supabase} />
-      </Container>
-    </Auth.UserContextProvider>
+      <button onClick={handleLogin}>click</button>
     </div>
   )
-}
-
-const Container = (props) => {
-  const { user } = Auth.useUser()
-  if (user)
-    return (
-      <>
-        <Typography.Text>Signed in: {user.email}</Typography.Text>
-        <Button block onClick={() => props.supabaseClient.auth.signOut()}>
-          Sign out
-        </Button>
-      </>
-    )
-  return props.children
 }
