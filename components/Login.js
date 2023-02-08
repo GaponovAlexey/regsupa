@@ -3,14 +3,14 @@ import supabase from "supabase"
 
 export const LoginApp = () => {
   const handleLogin = async () => {
-    const { error: signInError, data } = await supabase.auth.signInWithOAuth({
+    const { error: signInError } = await supabase.auth.signInWithOAuth({
       provider: "google",
     })
     console.log(signInError)
   }
   async function getUserData() {
     const { da } = await supabase.auth.getUser
-      console.log("da4a", da)
+    console.log("da4a", da)
   }
   getUserData()
   return (
