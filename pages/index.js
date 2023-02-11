@@ -1,3 +1,4 @@
+import { Projects } from "@/components/Projects"
 import supabase from "@/supabase"
 import { Inter } from "@next/font/google"
 import Link from "next/link"
@@ -7,7 +8,6 @@ import { useEffect, useState } from "react"
 const inter = Inter({ subsets: ["latin"] })
 
 export default function Home() {
-
   useEffect(() => {
     supabase.auth.onAuthStateChange((e) => {
       console.log("onAuthStateChange", e)
@@ -27,18 +27,19 @@ export default function Home() {
 
   useEffect(() => {
     const hash = router.asPath
-    const newToken = hash.split('&')[0].replace('/#access_token=', '')
+    const newToken = hash.split("&")[0].replace("/#access_token=", "")
     setToken(newToken)
+    console.log(hash)
   }, [router.asPath])
 
   console.log("token", token)
-  
 
   return (
     <>
       <main className={inter.className}>starts</main>
       <Link href="/login">login</Link>
       <button onClick={signOut}>SignOut</button>
+      <Projects />
     </>
   )
 }
